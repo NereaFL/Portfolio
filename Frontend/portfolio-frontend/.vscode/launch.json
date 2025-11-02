@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot Backend",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/Backend",
+      "mainClass": "com.example.Portfolio.PortfolioApplication",
+      "projectName": "Backend"
+    }
+  ]
+}
+ 

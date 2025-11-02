@@ -1,0 +1,69 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0"><i class="bi bi-briefcase me-2"></i>Experiencia</h3>
+    <button *ngIf="auth.loggedIn()" class="btn btn-primary btn-sm" (click)="openCreate()">
+      <i class="bi bi-plus-lg me-1"></i> Añadir
+    </button>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12" *ngFor="let exp of experiences">
+      <div class="card exp-card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between flex-wrap gap-2">
+            <div>
+              <h5 class="card-title mb-1">{{ exp.jobTitle }}</h5>
+              <div class="text-muted">{{ exp.company }}</div>
+              <div class="badge bg-light text-dark mt-2">
+                {{ exp.startDate }} — {{ exp.endDate || 'Actual' }}
+              </div>
+            </div>
+            <div *ngIf="auth.loggedIn()" class="btn-group">
+              <button class="btn btn-outline-primary btn-sm" (click)="openEdit(exp)"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-outline-danger btn-sm" (click)="del(exp.id)"><i class="bi bi-trash"></i></button>
+            </div>
+          </div>
+          <p class="mb-0 mt-3">{{ exp.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="experienceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form class="modal-content" #f="ngForm" (ngSubmit)="save(f)">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ form.id ? 'Editar experiencia' : 'Añadir experiencia' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Puesto *</label>
+          <input class="form-control" name="jobTitle" [(ngModel)]="form.jobTitle" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Empresa *</label>
+          <input class="form-control" name="company" [(ngModel)]="form.company" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Inicio *</label>
+          <input class="form-control" name="startDate" [(ngModel)]="form.startDate" placeholder="Enero 2025" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Fin</label>
+          <input class="form-control" name="endDate" [(ngModel)]="form.endDate" placeholder="Junio 2025 o vacío si Actual" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Descripción *</label>
+          <textarea class="form-control" name="description" rows="4" [(ngModel)]="form.description" required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

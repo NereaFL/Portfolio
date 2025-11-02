@@ -1,0 +1,23 @@
+<div class="container py-4">
+  <h3 class="mb-3"><i class="bi bi-kanban me-2"></i>Proyectos</h3>
+
+  <ng-container *ngIf="projects?.length; else empty">
+    <div class="row g-3">
+      <div class="col-12 col-md-6 col-lg-4" *ngFor="let p of projects">
+        <div class="card rounded-4 shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ p.name }}</h5>
+            <p class="card-text">{{ p.description }}</p>
+            <a *ngIf="p.url" [href]="p.url" target="_blank" class="btn btn-primary btn-sm">Ver proyecto</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #empty>
+    <div class="alert alert-info rounded-3">
+      Aún no existen proyectos publicados. ¡Pronto habrá novedades! 🚀
+    </div>
+  </ng-template>
+</div>

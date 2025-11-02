@@ -1,0 +1,181 @@
+<div class="container py-5">
+
+  <!-- HERO PERFIL -->
+  <section class="profile-hero text-center mb-5 rounded-4 p-4 p-md-5 shadow-soft">
+    <img src="assets/profile.png" class="rounded-circle shadow mb-3 profile-photo" alt="Foto de perfil" width="160" height="160" />
+    <h1 class="fw-bold mb-1">{{ person?.fullName }}</h1>
+    <h4 class="text-primary mb-3">{{ person?.title }}</h4>
+
+    <p class="lead mx-auto about-text text-muted-2">{{ person?.aboutMe }}</p>
+
+    <ul class="list-inline mt-3">
+      <li class="list-inline-item me-3"><i class="bi bi-envelope-fill text-danger"></i> {{ person?.email }}</li>
+      <li class="list-inline-item me-3"><i class="bi bi-telephone-fill text-success"></i> {{ person?.phone }}</li>
+      <li class="list-inline-item"><i class="bi bi-geo-alt-fill text-primary"></i> {{ person?.location }}</li>
+    </ul>
+
+    <!-- Botones sociales -->
+      <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+      <!-- GitHub -->
+      <a href="{{ person.github }}" target="_blank" class="btn btn-dark shadow-sm">
+        <i class="bi bi-github"></i> GitHub
+      </a>
+
+      <!-- LinkedIn -->
+      <a href="{{ person.linkedin }}" target="_blank" class="btn btn-primary shadow-sm">
+        <i class="bi bi-linkedin"></i> LinkedIn
+      </a>
+
+      <!-- Habilidades -->
+      <a routerLink="/skills" class="btn btn-outline-secondary shadow-sm">
+        <i class="bi bi-lightning-charge-fill text-warning"></i> Habilidades
+      </a>
+
+
+      <!-- 📝 Editar perfil (solo logueada) -->
+      <button *ngIf="auth.loggedIn()" class="btn btn-primary ms-0 ms-md-2" (click)="openEditPerson()">
+        <i class="bi bi-pencil-square me-1"></i> Editar perfil
+      </button>
+    </div>
+  </section>
+
+  <!-- EDUCACIÓN (debajo de redes) -->
+  <section class="mb-5 section-block shadow-soft education-wrap">
+    <div class="section-header">
+      <h5 class="section-title mb-0">
+        <i class="bi bi-mortarboard-fill me-2"></i> Educación
+      </h5>
+      <button *ngIf="auth.loggedIn()" class="btn btn-accent btn-sm" (click)="openCreateEdu()">
+        <i class="bi bi-plus-lg"></i> Añadir
+      </button>
+    </div>
+
+    <div *ngIf="education?.length; else noEdu" class="row g-3">
+     <div class="col-12 col-md-6 col-lg-6 d-flex" *ngFor="let ed of education">
+        <article class="card edu-card border-0 shadow-soft hover-up rounded-4 h-100 w-100">
+          <div class="card-body d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="badge badge-accent">{{ ed.type || 'Oficial' }}</span>
+              <div *ngIf="auth.loggedIn()" class="ms-2">
+                <button class="btn btn-sm btn-outline-accent me-1" (click)="openEditEdu(ed)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteEdu(ed.id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <h6 class="fw-semibold mb-1">{{ ed.title }}</h6>
+            <div class="text-muted">{{ ed.institution }}</div>
+            <small class="text-primary fw-semibold">{{ ed.startYear }} - {{ ed.endYear || 'Actual' }}</small>
+
+            <p class="mb-0 mt-3 flex-grow-1" *ngIf="ed.notes">{{ ed.notes }}</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <ng-template #noEdu>
+      <div class="alert alert-info mb-0 rounded-3">Aún no hay estudios registrados.</div>
+    </ng-template>
+  </section>
+
+  <!-- 3 CARDS: Experiencia, Cursos, Proyectos -->
+  <section class="mb-2">
+    <div class="row g-4">
+      <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-soft hover-up border-0 rounded-4">
+          <img src="assets/experience.jpg" class="card-img-top object-cover rounded-top-4" alt="Experiencia" />
+          <div class="card-body text-center">
+            <h5 class="card-title mb-2">Experiencia</h5>
+            <p class="card-text text-muted">Mi recorrido profesional y responsabilidades.</p>
+            <a routerLink="/experience" class="btn btn-primary">Ver experiencia</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-soft hover-up border-0 rounded-4">
+          <img src="assets/courses.jpg" class="card-img-top object-cover rounded-top-4" alt="Cursos" />
+          <div class="card-body text-center">
+            <h5 class="card-title mb-2">Cursos</h5>
+            <p class="card-text text-muted">Formación, certificaciones y diplomas.</p>
+            <a routerLink="/courses" class="btn btn-primary">Ver cursos</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-soft hover-up border-0 rounded-4">
+          <img src="assets/projects.jpg" class="card-img-top object-cover rounded-top-4" alt="Proyectos" />
+          <div class="card-body text-center">
+            <h5 class="card-title mb-2">Proyectos</h5>
+            <p class="card-text text-muted">Aplicaciones y trabajos destacados.</p>
+            <a routerLink="/projects" class="btn btn-primary">Ver proyectos</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MODAL CREAR/EDITAR EDUCACIÓN (igual que tenías) -->
+<div class="modal fade" id="eduModal" tabindex="-1" aria-labelledby="eduModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content" #f="ngForm" (ngSubmit)="saveEdu(f)">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eduModalLabel">
+          {{ isEditingEdu ? 'Editar Educación' : 'Añadir Educación' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Título *</label>
+          <input type="text" class="form-control" name="title" [(ngModel)]="eduForm.title" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Institución *</label>
+          <input type="text" class="form-control" name="institution" [(ngModel)]="eduForm.institution" required />
+        </div>
+
+        <div class="row">
+          <div class="col-6 mb-3">
+            <label class="form-label">Año inicio *</label>
+            <input type="number" class="form-control" name="startYear" [(ngModel)]="eduForm.startYear" required min="1900" max="2100" />
+          </div>
+          <div class="col-6 mb-3">
+            <label class="form-label">Año fin</label>
+            <input type="number" class="form-control" name="endYear" [(ngModel)]="eduForm.endYear" min="1900" max="2100" />
+            <div class="form-text">Déjalo vacío si sigue en curso.</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Tipo</label>
+          <select class="form-select" name="type" [(ngModel)]="eduForm.type">
+            <option value="">—</option>
+            <option>FP</option>
+            <option>Universidad</option>
+            <option>Especialización</option>
+          </select>
+        </div>
+
+        <div class="mb-0">
+          <label class="form-label">Notas</label>
+          <textarea class="form-control" rows="3" name="notes" [(ngModel)]="eduForm.notes"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-accent" [disabled]="f.invalid">
+          {{ isEditingEdu ? 'Guardar cambios' : 'Crear' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

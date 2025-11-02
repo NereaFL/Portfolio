@@ -1,0 +1,48 @@
+/* Barra con gradiente y buen contraste */
+.nav-gradient{
+  background: linear-gradient(90deg, #1b2a4a, #243b74);
+}
+
+/* Enlaces en escritorio */
+.navbar .nav-link{
+  color: #dfe7ff;
+  padding: .5rem .75rem;
+}
+.navbar .nav-link.active{ color:#fff !important; font-weight: 700; }
+.navbar .nav-link:hover{ color:#fff; }
+
+/* Toggler solo en móvil (el HTML ya tiene d-lg-none) */
+.navbar-toggler { top: 50%; transform: translateY(-50%); }
+
+/* OFFCANVAS oscuro con gradiente y texto claro */
+.offcanvas-dark{
+  color: #fff;
+  background: linear-gradient(180deg, #1c2748 0%, #10172a 100%);
+  border-right: 1px solid rgba(255,255,255,.06);
+}
+.offcanvas-dark .offcanvas-title{ color:#fff; }
+.offcanvas-dark .nav-link{
+  color: rgba(255,255,255,.88);
+  font-weight: 500;
+  padding: .65rem .25rem;
+}
+.offcanvas-dark .nav-link.active,
+.offcanvas-dark .nav-link:hover{
+  color: #fff;
+  text-decoration: underline;
+}
+.offcanvas-dark .btn-close-white{
+  filter: invert(1) grayscale(100%);
+}
+
+/* 🟦 ANCHO del panel (evita “estrecho”) */
+.offcanvas-start{
+  --bs-offcanvas-width: 86vw;  /* móvil por defecto */
+}
+@media (min-width: 576px){
+  .offcanvas-start{ --bs-offcanvas-width: 320px; }
+}
+.offcanvas-dark .offcanvas-body{
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

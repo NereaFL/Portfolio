@@ -1,0 +1,2 @@
+.edu-card { border-radius: 14px; transition: transform .18s ease, box-shadow .18s ease; }
+.edu-card:hover { transform: translateY(-4px); box-shadow: 0 12px 26px rgba(0,0,0,.08); }

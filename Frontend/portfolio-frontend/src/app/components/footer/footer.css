@@ -1,0 +1,22 @@
+.site-footer{
+  color: #fff;
+  background: linear-gradient(180deg, #1c2748 0%, #10172a 100%);
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.footer-title{
+  font-weight: 700;
+  letter-spacing: .3px;
+  margin-bottom: .5rem;
+}
+.footer-link{
+  color: rgba(255,255,255,.75);
+  text-decoration: none;
+  display: inline-block;
+  padding: .15rem 0;
+}
+.footer-link:hover{ color:#fff; text-decoration: underline; }
+.text-light-60{ color: rgba(255,255,255,.6); }
+.footer-bottom{
+  border-top: 1px solid rgba(255,255,255,.06);
+  background: rgba(0,0,0,.1);
+}

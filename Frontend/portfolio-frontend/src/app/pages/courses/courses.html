@@ -1,0 +1,74 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0"><i class="bi bi-mortarboard me-2"></i>Cursos</h3>
+    <button *ngIf="auth.loggedIn()" class="btn btn-primary btn-sm" (click)="openCreate()">
+      <i class="bi bi-plus-lg me-1"></i> Añadir
+    </button>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-md-6" *ngFor="let c of courses">
+      <div class="card course-card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body p-4 d-flex flex-column">
+          <div class="d-flex justify-content-between flex-wrap gap-2 mb-2">
+            <div>
+              <h5 class="card-title mb-1">{{ c.name }}</h5>
+              <div class="text-muted">{{ c.institution }}</div>
+              <div class="badge bg-light text-dark mt-2">{{ c.duration || 'Fecha no indicada' }}</div>
+            </div>
+            <div *ngIf="auth.loggedIn()" class="btn-group">
+              <button class="btn btn-outline-primary btn-sm" (click)="openEdit(c)"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-outline-danger btn-sm" (click)="del(c.id)"><i class="bi bi-trash"></i></button>
+            </div>
+          </div>
+
+          <p class="mb-3">{{ c.description }}</p>
+
+          <div class="mt-auto" *ngIf="c.diplomaPath">
+            <a [href]="c.diplomaPath" target="_blank" class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-filetype-pdf me-1"></i> Ver diploma
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form class="modal-content" #f="ngForm" (ngSubmit)="save(f)">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ form.id ? 'Editar curso' : 'Añadir curso' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombre *</label>
+          <input class="form-control" name="name" [(ngModel)]="form.name" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Institución *</label>
+          <input class="form-control" name="institution" [(ngModel)]="form.institution" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Fecha / Duración *</label>
+          <input class="form-control" name="duration" [(ngModel)]="form.duration" placeholder="14/09/2025 o 'En proceso'" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Ruta diploma (opcional)</label>
+          <input class="form-control" name="diplomaPath" [(ngModel)]="form.diplomaPath" placeholder="assets/diplomas/tu-archivo.pdf" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Descripción *</label>
+          <textarea class="form-control" name="description" rows="4" [(ngModel)]="form.description" required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* ---- PALETA GLOBAL ---- */
+:root{
+  --bg-1: #f4f7fb;
+  --bg-2: #ffffff;
+
+  --text-1: #0f2135;
+  --text-2: #5c6b7a;
+
+  --primary: #2855dd;       /* azul profesional */
+  --primary-600: #1f46bf;
+  --primary-100: #e9efff;
+
+  --teal: #17a2b8;          /* acento secundario */
+  --orange: #ff9f43;        /* acento cálido */
+
+  --success: #2fb380;
+  --danger: #dc3545;
+}
+
+/* ---- BASE ---- */
+html, body { height: 100%; }
+body {
+  margin: 0;
+  color: var(--text-1);
+  background:
+    radial-gradient(1200px 600px at 10% 0%, #eef3ff 0%, transparent 55%),
+    radial-gradient(1000px 500px at 90% 0%, #f1fff9 0%, transparent 45%),
+    var(--bg-1);
+  font-smooth: always;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--primary); }
+a:hover { color: var(--primary-600); }
+
+/* ---- NAVBAR (si la usas) ---- */
+.nav-gradient { background: linear-gradient(90deg, #1b2a4a, #243b74); }
+.nav-link.active { color: #fff !important; font-weight: 600; }
+
+/* ---- BOTONES ---- */
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+.btn-primary:hover { background-color: var(--primary-600); border-color: var(--primary-600); }
+
+.btn-accent {
+  background: linear-gradient(90deg, var(--primary), #3e9bdc);
+  border: none;
+  color: #fff;
+}
+.btn-accent:hover { filter: brightness(0.95); }
+
+.btn-outline-accent {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+.btn-outline-accent:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ---- BADGES ---- */
+.badge-accent {
+  background: linear-gradient(90deg, var(--primary), #3e9bdc);
+  color: #fff;
+}
+
+/* ---- TARJETAS ---- */
+.card {
+  border-radius: 14px;
+  border: 1px solid #e9eef6;
+  background: var(--bg-2);
+}
+.shadow-soft { box-shadow: 0 10px 24px rgba(15,33,53,0.06); }
+.hover-up { transition: transform .18s ease, box-shadow .18s ease; }
+.hover-up:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(15,33,53,0.10); }
+
+/* ---- SECCIONES ---- */
+.section-block {
+  background: #fff;
+  border: 1px solid #e9eef6;
+  border-radius: 16px;
+  padding: 20px;
+}
+.section-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom: 12px;
+}
+
+/* ---- UTILIDADES ---- */
+.text-muted-2 { color: var(--text-2); }
+.rounded-top-4 { border-top-left-radius: 1rem; border-top-right-radius: 1rem; }
+.object-cover { object-fit: cover; }
