@@ -84,15 +84,19 @@ public class SecurityConfig {
 
     // 🌐 CORS configuración
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration cfg = new CorsConfiguration();
-        cfg.setAllowedOrigins(List.of("https://portfolio-rho-ten-cm7d10hpf5.vercel.app/"));
-        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        cfg.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
-        cfg.setAllowCredentials(true);
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration cfg = new CorsConfiguration();
+    cfg.setAllowedOrigins(List.of(
+        "https://portfolio-rho-ten-cm7d10hpf5.vercel.app", // ✅ sin barra final
+        "http://localhost:4200" // para desarrollo local
+    ));
+    cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+    cfg.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
+    cfg.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", cfg);
-        return source;
-    }
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", cfg);
+    return source;
+}
+
 }
