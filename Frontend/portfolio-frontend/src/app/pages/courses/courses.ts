@@ -55,7 +55,7 @@ private fixPath(path: string | null): string | null {
   if (path.startsWith('http')) return path;
   // ✅ Ahora los diplomas están servidos desde el backend
   if (path.startsWith('/diplomas/')) {
-    return `http://localhost:8080${path}`;
+    return `https://portfolio-backend-nerea.onrender.com${path}`;
   }
   return path;
 }
