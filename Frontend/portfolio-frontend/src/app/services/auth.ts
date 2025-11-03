@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { config } from '../config'; // 👈 Importa tu config
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly TOKEN_KEY = 'token';
+  private readonly apiUrl = `${config.apiUrl}/api/auth`; // 👈 Base de tu backend
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string) {
-    return this.http.post('http://localhost:8080/api/auth/login', { email, password }, { responseType: 'text' });
+    return this.http.post(`${this.apiUrl}/login`, { email, password }, { responseType: 'text' });
   }
 
   saveToken(token: string) {
