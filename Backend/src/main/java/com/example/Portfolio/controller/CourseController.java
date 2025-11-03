@@ -55,7 +55,8 @@ public class CourseController {
             Files.write(filePath, file.getBytes());
 
             // ✅ Ruta servida desde backend
-            course.setDiplomaPath("/diplomas/" + fileName);
+            course.setDiplomaPath("course.setDiplomaPath(\"https://portfolio-backend-nerea.onrender.com/diplomas/\" + fileName);\r\n" + //
+                                "/diplomas/" + fileName);
         }
 
         return courseService.save(course);
@@ -87,7 +88,8 @@ public class CourseController {
             Path filePath = Paths.get(uploadDir, fileName);
             Files.write(filePath, file.getBytes());
 
-            updated.setDiplomaPath("/diplomas/" + fileName);
+            updated.setDiplomaPath("course.setDiplomaPath(\"https://portfolio-backend-nerea.onrender.com/diplomas/\" + fileName);\r\n" + //
+                                "/diplomas/" + fileName);
         }
 
         return courseService.save(updated);
