@@ -1,73 +1,164 @@
 <div class="container py-4">
+  <!-- Encabezado -->
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="mb-0"><i class="bi bi-mortarboard me-2"></i>Cursos</h3>
-    <button *ngIf="auth.loggedIn()" class="btn btn-primary btn-sm" (click)="openCreate()">
-      <i class="bi bi-plus-lg me-1"></i> Añadir
+    <h3 class="mb-0">
+      <i class="bi bi-mortarboard me-2"></i> Cursos
+    </h3>
+
+    <button
+      *ngIf="auth.loggedIn()"
+      class="btn btn-primary btn-sm d-flex align-items-center gap-1"
+      (click)="openCreate()"
+    >
+      <i class="bi bi-plus-lg"></i>
+      <span>Añadir</span>
     </button>
   </div>
 
+  <!-- Listado de cursos -->
   <div class="row g-4">
     <div class="col-12 col-md-6" *ngFor="let c of courses">
-      <div class="card course-card shadow-sm border-0 rounded-4 h-100">
+      <div class="card course-card shadow-sm border-0 rounded-4 h-100 hover-up">
         <div class="card-body p-4 d-flex flex-column">
           <div class="d-flex justify-content-between flex-wrap gap-2 mb-2">
             <div>
-              <h5 class="card-title mb-1">{{ c.name }}</h5>
-              <div class="text-muted">{{ c.institution }}</div>
-              <div class="badge bg-light text-dark mt-2">{{ c.duration || 'Fecha no indicada' }}</div>
+              <h5 class="card-title mb-1 text-primary">{{ c.name }}</h5>
+              <div class="text-muted small">{{ c.institution }}</div>
+              <div class="badge bg-light text-dark mt-2">
+                {{ c.duration || 'Fecha no indicada' }}
+              </div>
             </div>
+
             <div *ngIf="auth.loggedIn()" class="btn-group">
-              <button class="btn btn-outline-primary btn-sm" (click)="openEdit(c)"><i class="bi bi-pencil"></i></button>
-              <button class="btn btn-outline-danger btn-sm" (click)="del(c.id)"><i class="bi bi-trash"></i></button>
+              <button
+                class="btn btn-outline-primary btn-sm"
+                (click)="openEdit(c)"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                class="btn btn-outline-danger btn-sm"
+                (click)="del(c.id)"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
             </div>
           </div>
 
-          <p class="mb-3">{{ c.description }}</p>
+          <p class="mb-3 flex-grow-1">{{ c.description }}</p>
 
-          <div class="mt-auto" *ngIf="c.diplomaPath">
-            <a [href]="c.diplomaPath" target="_blank" class="btn btn-outline-primary btn-sm">
-              <i class="bi bi-filetype-pdf me-1"></i> Ver diploma
+          <div *ngIf="c.diplomaPath" class="mt-auto">
+            <a
+              [href]="c.diplomaPath"
+              target="_blank"
+              class="btn btn-outline-primary btn-sm w-100"
+            >
+              <i class="bi bi-file-earmark-pdf me-1"></i> Ver diploma
             </a>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Mensaje si no hay cursos -->
+  <div *ngIf="!courses.length" class="alert alert-info mt-4 rounded-3 text-center">
+    <i class="bi bi-info-circle me-2"></i> No hay cursos registrados aún.
+  </div>
 </div>
 
-<!-- Modal Crear/Editar -->
+<!-- MODAL CREAR / EDITAR -->
 <div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <form class="modal-content" #f="ngForm" (ngSubmit)="save(f)">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ form.id ? 'Editar curso' : 'Añadir curso' }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-mortarboard-fill me-2"></i>
+          {{ form.id ? 'Editar curso' : 'Añadir curso' }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
       </div>
+
       <div class="modal-body row g-3">
         <div class="col-md-6">
-          <label class="form-label">Nombre *</label>
-          <input class="form-control" name="name" [(ngModel)]="form.name" required />
+          <label class="form-label fw-semibold">Nombre *</label>
+          <input
+            class="form-control"
+            name="name"
+            [(ngModel)]="form.name"
+            required
+          />
         </div>
+
         <div class="col-md-6">
-          <label class="form-label">Institución *</label>
-          <input class="form-control" name="institution" [(ngModel)]="form.institution" required />
+          <label class="form-label fw-semibold">Institución *</label>
+          <input
+            class="form-control"
+            name="institution"
+            [(ngModel)]="form.institution"
+            required
+          />
         </div>
+
         <div class="col-md-6">
-          <label class="form-label">Fecha / Duración *</label>
-          <input class="form-control" name="duration" [(ngModel)]="form.duration" placeholder="14/09/2025 o 'En proceso'" required />
+          <label class="form-label fw-semibold">Fecha / Duración *</label>
+          <input
+            class="form-control"
+            name="duration"
+            [(ngModel)]="form.duration"
+            placeholder="14/09/2025 o 'En proceso'"
+            required
+          />
         </div>
+
+        <!-- 🆕 Campo de archivo -->
         <div class="col-md-6">
-          <label class="form-label">Ruta diploma (opcional)</label>
-          <input class="form-control" name="diplomaPath" [(ngModel)]="form.diplomaPath" placeholder="assets/diplomas/tu-archivo.pdf" />
+          <label class="form-label fw-semibold">Adjuntar diploma</label>
+          <input
+            type="file"
+            class="form-control"
+            (change)="onFileSelected($event)"
+            accept=".pdf,.jpg,.png,.jpeg"
+          />
+          <div class="form-text">
+            Se guardará automáticamente en
+            <b>assets/diplomas/</b> con el nombre del curso.
+          </div>
         </div>
+
         <div class="col-12">
-          <label class="form-label">Descripción *</label>
-          <textarea class="form-control" name="description" rows="4" [(ngModel)]="form.description" required></textarea>
+          <label class="form-label fw-semibold">Descripción *</label>
+          <textarea
+            class="form-control"
+            name="description"
+            rows="4"
+            [(ngModel)]="form.description"
+            required
+          ></textarea>
         </div>
       </div>
+
       <div class="modal-footer">
-        <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-        <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Guardar</button>
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          data-bs-dismiss="modal"
+        >
+          Cancelar
+        </button>
+        <button
+          class="btn btn-success"
+          type="submit"
+          [disabled]="f.invalid"
+        >
+          <i class="bi bi-save me-1"></i>
+          Guardar
+        </button>
       </div>
     </form>
   </div>

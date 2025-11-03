@@ -21,9 +21,12 @@ export class Home implements OnInit {
   person: any = null;
   education: any[] = [];
 
-  // ====== MODAL EDUCACIÓN ======
+  // ====== MODALES ======
   modalRef: any = null;
-  isEditingEdu = false;  // <- clave: nombre correcto y consistente
+  modalPersonRef: any = null;
+  isEditingEdu = false;
+
+  // ====== FORMULARIOS ======
   eduForm = {
     id: null as number | null,
     title: '',
@@ -34,8 +37,6 @@ export class Home implements OnInit {
     notes: ''
   };
 
-  // ====== MODAL PERSONA ======
-  modalPersonRef: any = null;
   personForm = {
     id: null as number | null,
     fullName: '',
@@ -53,7 +54,7 @@ export class Home implements OnInit {
     this.loadEducation();
   }
 
-  // ---------- PERSON ----------
+  // ---------- PERSONA ----------
   loadPerson() {
     this.api.getPerson().subscribe({
       next: (d) => {
@@ -70,7 +71,7 @@ export class Home implements OnInit {
           github: this.person?.github ?? ''
         };
       },
-      error: (e) => console.error('Error cargando persona', e.status, e.message, e.error)
+      error: (e) => console.error('Error cargando persona', e)
     });
   }
 
@@ -96,20 +97,24 @@ export class Home implements OnInit {
       github: this.personForm.github.trim()
     };
 
-    this.api.updatePerson(this.personForm.id).subscribe({
+    this.api.updatePerson(this.personForm.id!, payload).subscribe({
       next: (res) => {
         this.person = res;
         this.modalPersonRef?.hide();
+        this.showAlert('Perfil actualizado correctamente ✅', 'success');
       },
-      error: (e) => console.error('Error actualizando persona', e.status, e.message, e.error)
+      error: (e) => {
+        console.error('Error actualizando persona', e);
+        this.showAlert('Error al actualizar el perfil ❌', 'danger');
+      }
     });
   }
 
-  // ---------- EDUCATION ----------
+  // ---------- EDUCACIÓN ----------
   loadEducation() {
     this.api.getEducation().subscribe({
       next: (d) => this.education = d || [],
-      error: (e) => console.error('Error cargando educación', e.status, e.message, e.error)
+      error: (e) => console.error('Error cargando educación', e)
     });
   }
 
@@ -152,16 +157,18 @@ export class Home implements OnInit {
         next: (res) => {
           this.education = this.education.map(e => e.id === this.eduForm.id ? res : e);
           this.modalRef?.hide();
+          this.showAlert('Educación actualizada ✅', 'success');
         },
-        error: (e) => console.error('Error actualizando educación', e.status, e.message, e.error)
+        error: (e) => console.error('Error actualizando educación', e)
       });
     } else {
       this.api.addEducation(payload).subscribe({
         next: (res) => {
           this.education = [res, ...this.education];
           this.modalRef?.hide();
+          this.showAlert('Educación creada ✅', 'success');
         },
-        error: (e) => console.error('Error creando educación', e.status, e.message, e.error)
+        error: (e) => console.error('Error creando educación', e)
       });
     }
   }
@@ -170,13 +177,16 @@ export class Home implements OnInit {
     if (!this.auth.loggedIn()) return;
     if (confirm('¿Eliminar este registro de educación?')) {
       this.api.deleteEducation(id).subscribe({
-        next: () => this.education = this.education.filter(e => e.id !== id),
-        error: (e) => console.error('Error eliminando educación', e.status, e.message, e.error)
+        next: () => {
+          this.education = this.education.filter(e => e.id !== id);
+          this.showAlert('Registro eliminado ✅', 'success');
+        },
+        error: (e) => console.error('Error eliminando educación', e)
       });
     }
   }
 
-  // ---------- HELPERS MODALES ----------
+  // ---------- MODALES ----------
   openEduModal() {
     const el = document.getElementById('eduModal');
     if (!el) return;
@@ -187,5 +197,21 @@ export class Home implements OnInit {
   closeModal() {
     this.modalRef?.hide();
     this.modalPersonRef?.hide();
+  }
+
+  // ---------- ALERTA VISUAL ----------
+  showAlert(message: string, type: 'success' | 'danger' | 'info' = 'info') {
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+    if (!alertPlaceholder) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
+      <div class="alert alert-${type} alert-dismissible fade show shadow-sm" role="alert">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `;
+    alertPlaceholder.append(wrapper);
+    setTimeout(() => wrapper.remove(), 3000);
   }
 }

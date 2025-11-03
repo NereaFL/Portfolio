@@ -1,3 +1,8 @@
+<div id="liveAlertPlaceholder"
+     class="position-fixed top-0 start-50 translate-middle-x mt-3"
+     style="z-index:1060;width:90%;max-width:400px;">
+</div>
+
 <div class="container py-5">
 
   <!-- HERO PERFIL -->
@@ -120,6 +125,67 @@
   </section>
 </div>
 
+<!-- MODAL EDITAR PERFIL -->
+<div class="modal fade" id="personModal" tabindex="-1" aria-labelledby="personModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form class="modal-content" #pf="ngForm" (ngSubmit)="savePerson(pf)">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="personModalLabel">Editar Perfil</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Nombre completo</label>
+            <input type="text" name="fullName" [(ngModel)]="personForm.fullName" class="form-control" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Título</label>
+            <input type="text" name="title" [(ngModel)]="personForm.title" class="form-control" required />
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Sobre mí</label>
+            <textarea name="aboutMe" [(ngModel)]="personForm.aboutMe" rows="3" class="form-control"></textarea>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" [(ngModel)]="personForm.email" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Teléfono</label>
+            <input type="text" name="phone" [(ngModel)]="personForm.phone" class="form-control" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Ubicación</label>
+            <input type="text" name="location" [(ngModel)]="personForm.location" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">LinkedIn</label>
+            <input type="text" name="linkedin" [(ngModel)]="personForm.linkedin" class="form-control" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">GitHub</label>
+            <input type="text" name="github" [(ngModel)]="personForm.github" class="form-control" />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-success">
+          <i class="bi bi-save"></i> Guardar cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
 <!-- MODAL CREAR/EDITAR EDUCACIÓN (igual que tenías) -->
 <div class="modal fade" id="eduModal" tabindex="-1" aria-labelledby="eduModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -161,6 +227,7 @@
             <option>FP</option>
             <option>Universidad</option>
             <option>Especialización</option>
+            <option>Bachillerato</option>
           </select>
         </div>
 

@@ -2,6 +2,7 @@ package com.example.Portfolio.service;
 
 import com.example.Portfolio.model.Course;
 import com.example.Portfolio.repository.CourseRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class CourseService {
     }
 
     public List<Course> getAll() {
-        return courseRepository.findAll();
+        return courseRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     public Course getById(Long id) {

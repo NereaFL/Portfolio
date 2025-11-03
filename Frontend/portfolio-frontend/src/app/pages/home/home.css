@@ -1,8 +1,6 @@
 /* ==== BASE GENERAL ==== */
-
-/* Fondo gris más oscuro — elegante, sin llegar a negro */
 body {
-  background-color: #d4d7de; /* gris piedra claro, alto contraste */
+  background-color: #dfe3ea;
   color: #2c2f36;
   font-family: 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
@@ -10,8 +8,7 @@ body {
   padding: 0;
 }
 
-/* ==== BLOQUES Y SECCIONES ==== */
-
+/* ==== SECCIONES ==== */
 .section-block {
   background: #ffffff;
   border-radius: 1.5rem;
@@ -23,15 +20,16 @@ body {
 }
 
 /* ==== PERFIL HERO ==== */
-
 .profile-hero {
-  background: #ffffff;
+  background: linear-gradient(90deg, rgba(229, 239, 255, 0.7) 0%, #ffffff 25%, #ffffff 75%, rgba(229, 239, 255, 0.7) 100%);
   color: #1f2a44;
   border-radius: 1.5rem;
   padding: 3rem 2rem;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
   max-width: 1100px;
   margin: 2rem auto;
+  position: relative;
+  overflow: hidden;
 }
 
 .profile-photo {
@@ -49,14 +47,17 @@ body {
   color: #6c7280;
 }
 
-/* ==== BOTONES ==== */
+.profile-hero h1,
+.profile-hero h4 {
+  color: #1e3a8a;
+}
 
+/* ==== BOTONES ==== */
 .btn-primary {
   background-color: #1e40af;
   border: none;
   transition: all 0.2s ease;
 }
-
 .btn-primary:hover {
   background-color: #1e3a8a;
 }
@@ -66,7 +67,6 @@ body {
   color: #fff;
   border: none;
 }
-
 .btn-accent:hover {
   background-color: #1d4ed8;
 }
@@ -75,14 +75,12 @@ body {
   border: 1.5px solid #2563eb;
   color: #2563eb;
 }
-
 .btn-outline-accent:hover {
   background-color: #2563eb;
   color: #fff;
 }
 
 /* ==== EDUCACIÓN ==== */
-
 .education-wrap {
   background: #ffffff;
   border-radius: 1.2rem;
@@ -110,7 +108,6 @@ body {
   transition: transform 0.2s ease, box-shadow 0.3s ease;
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
 }
-
 .edu-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
@@ -124,8 +121,7 @@ body {
   border-radius: 0.5rem;
 }
 
-/* ==== CARDS (EXPERIENCIA, CURSOS, PROYECTOS) ==== */
-
+/* ==== CARDS ==== */
 .card {
   background-color: #ffffff;
   border-radius: 1.2rem;
@@ -135,46 +131,38 @@ body {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(0, 0, 0, 0.07);
 }
-
 .card:hover {
   transform: translateY(-6px);
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28);
 }
-
 .card-img-top {
   height: 160px;
   object-fit: cover;
   filter: brightness(0.95);
   transition: filter 0.3s ease;
 }
-
 .card:hover .card-img-top {
   filter: brightness(1);
 }
-
 .card-title {
   color: #1e3a8a;
   font-weight: 600;
 }
-
 .card-text {
   font-size: 0.9rem;
   color: #444b59;
 }
 
 /* ==== RESPONSIVO ==== */
-
 @media (max-width: 768px) {
   .profile-hero {
     padding: 2rem 1rem;
   }
-
   .section-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-
   .card-img-top {
     height: 140px;
   }

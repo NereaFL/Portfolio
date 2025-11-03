@@ -27,19 +27,28 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-      @Bean
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // 🔓 Login y endpoints públicos
+                // ✅ Archivos estáticos (PDF, imágenes, etc.)
+                .requestMatchers(
+                    "/assets/**",   // por si sirves recursos estáticos
+                    "/diplomas/**"  // ⚠️ ahora tus PDF serán accesibles públicamente
+                ).permitAll()
+
+                // ✅ Endpoints públicos
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(
                     "/api/person/**",
@@ -50,7 +59,7 @@ public class SecurityConfig {
                     "/api/skills/**"
                 ).permitAll()
 
-                // 🔐 Solo ADMIN
+                // ✅ Endpoints administrativos (ADMIN o ROLE_ADMIN)
                 .requestMatchers(
                     "/api/person/admin/**",
                     "/api/experience/admin/**",
@@ -58,27 +67,30 @@ public class SecurityConfig {
                     "/api/projects/admin/**",
                     "/api/education/admin/**",
                     "/api/skills/admin/**"
-                ).hasRole("ADMIN")
+                ).hasAnyAuthority("ADMIN", "ROLE_ADMIN")
 
-                // 🔒 Cualquier otra ruta requiere autenticación
+                // 🔒 Todo lo demás requiere autenticación
                 .anyRequest().authenticated()
             )
+            // 🔧 Stateless JWT
+            .securityContext(ctx -> ctx.requireExplicitSave(false))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // Añadimos el filtro JWT
+        // 🧱 Filtro JWT
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // CORS para desarrollo (Angular en 4200). Ajusta dominios si hace falta.
+    // 🌐 CORS configuración
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(List.of("http://localhost:4200"));
-        cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
-        cfg.setAllowedHeaders(List.of("Authorization","Content-Type","Accept","Origin","X-Requested-With"));
-        cfg.setAllowCredentials(false);
+        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        cfg.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
+        cfg.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cfg);
         return source;

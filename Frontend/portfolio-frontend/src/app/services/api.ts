@@ -30,9 +30,10 @@ export class ApiService {
     return this.http.get(`${this.base}/person`);
   }
 
-  updatePerson(payload: any): Observable<any> {
-    return this.http.put(`${this.base}/person/admin`, payload, this.authHeader());
+  updatePerson(id: number, payload: any): Observable<any> {
+    return this.http.put(`${this.base}/person/admin/${id}`, payload, this.authHeader());
   }
+
 
   // ───────────────────────────────
   // 💼 EXPERIENCIA
