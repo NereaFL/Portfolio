@@ -12,7 +12,7 @@ export class ApiService {
   private auth = inject(AuthService);
 
   // ⚙️ Cambia el puerto si tu backend usa otro distinto
-  base = 'http://localhost:8080/api';
+  base = 'https://portfolio-backend-nerea.onrender.com/api';
 
   // ✅ Método que añade el token a las peticiones protegidas
   authHeader() {
