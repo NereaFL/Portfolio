@@ -37,50 +37,52 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                // ✅ Archivos estáticos (PDF, imágenes, etc.)
-                .requestMatchers(
-                    "/assets/**",   // por si sirves recursos estáticos
-                    "/diplomas/**"  // ⚠️ ahora tus PDF serán accesibles públicamente
-                ).permitAll()
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+            // ✅ Archivos estáticos
+            .requestMatchers(
+                "/",
+                "/favicon.ico",
+                "/assets/**",
+                "/diplomas/**"
+            ).permitAll()
 
-                // ✅ Endpoints públicos
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers(
-                    "/api/person/**",
-                    "/api/experience/**",
-                    "/api/courses/**",
-                    "/api/projects/**",
-                    "/api/education/**",
-                    "/api/skills/**"
-                ).permitAll()
+            // ✅ Endpoints públicos
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers(
+                "/api/person/**",
+                "/api/experience/**",
+                "/api/courses/**",
+                "/api/projects/**",
+                "/api/education/**",
+                "/api/skills/**"
+            ).permitAll()
 
-                // ✅ Endpoints administrativos (ADMIN o ROLE_ADMIN)
-                .requestMatchers(
-                    "/api/person/admin/**",
-                    "/api/experience/admin/**",
-                    "/api/courses/admin/**",
-                    "/api/projects/admin/**",
-                    "/api/education/admin/**",
-                    "/api/skills/admin/**"
-                ).hasAnyAuthority("ADMIN", "ROLE_ADMIN")
+            // ✅ Endpoints administrativos
+            .requestMatchers(
+                "/api/person/admin/**",
+                "/api/experience/admin/**",
+                "/api/courses/admin/**",
+                "/api/projects/admin/**",
+                "/api/education/admin/**",
+                "/api/skills/admin/**"
+            ).hasAnyAuthority("ADMIN", "ROLE_ADMIN")
 
-                // 🔒 Todo lo demás requiere autenticación
-                .anyRequest().authenticated()
-            )
-            // 🔧 Stateless JWT
-            .securityContext(ctx -> ctx.requireExplicitSave(false))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            // 🔒 Todo lo demás requiere autenticación
+            .anyRequest().authenticated()
+        )
+        .securityContext(ctx -> ctx.requireExplicitSave(false))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // 🧱 Filtro JWT
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    // 🧱 Filtro JWT
+    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+}
+
 
     // 🌐 CORS configuración
     @Bean
